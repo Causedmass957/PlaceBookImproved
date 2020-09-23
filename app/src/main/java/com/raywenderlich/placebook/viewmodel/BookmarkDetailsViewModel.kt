@@ -58,6 +58,8 @@ class BookmarkDetailsViewModel(application: Application) :
         return bookmarkDetailsView
     }
 
+
+
     data class BookmarkDetailsView(
         var id: Long? = null,
         var name: String = "",
@@ -71,17 +73,19 @@ class BookmarkDetailsViewModel(application: Application) :
             }
             return null
         }
-    }
 
-    fun updateBookmark(bookmarkView: BookmarkDetailsView) {
-// 1
-        GlobalScope.launch {
-// 2
-            val bookmark = bookmarkViewToBookmark(bookmarkView)
-// 3
-            bookmark?.let { bookmarkRepo.updateBookmark(it) }
+        fun setImage(context: Context, image: Bitmap) {
+            id?.let {
+                ImageUtils.saveBitmapToFile(context, image,
+                    Bookmark.generateImageFilename(it))
+            }
         }
     }
 
-
+    fun updateBookmark(bookmarkView: BookmarkDetailsView) {
+        GlobalScope.launch {
+            val bookmark = bookmarkViewToBookmark(bookmarkView)
+            bookmark?.let { bookmarkRepo.updateBookmark(it) }
+        }
+    }
 }
